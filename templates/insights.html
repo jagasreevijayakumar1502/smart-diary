@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Emotional Insights</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    body{
+        margin:0;
+        font-family: 'Segoe UI', sans-serif;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        min-height:100vh;
+        padding:40px 20px; 
+  margin:0;
+  min-height:100vh;
+  background: url("{{ url_for('static', filename='images/7.jpg') }}") center/cover no-repeat fixed;
+  position: relative;
+  color:#f1f1f1;
+}
+
+/* black translucent overlay */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,0.75);
+  z-index:0;
+}
+
+/* bring content above overlay */
+*{
+  position: relative;
+  z-index: 1;
+}
+    }
+
+    /* Main Heading */
+    .title{
+        font-size:34px;
+        font-weight:700;
+        margin-bottom:10px;
+        text-align:center;
+        letter-spacing:1px;
+    }
+
+    .subtitle{
+        color:#aaa;
+        font-size:15px;
+        margin-bottom:30px;
+        text-align:center;
+    }
+
+    /* Chart container (75% width) */
+    .chart-box{
+        width:75%;
+        max-width:1100px;
+        background:rgba(30,30,30,0.9);
+        border-radius:18px;
+        padding:25px;
+        box-shadow:0 20px 50px rgba(0,0,0,0.7);
+        margin-bottom:30px;
+    }
+
+    /* Advice box */
+    .advice-box{
+        width:75%;
+        max-width:1100px;
+        background:rgba(25,25,25,0.95);
+        border-radius:18px;
+        padding:25px 28px;
+        box-shadow:0 15px 40px rgba(0,0,0,0.65);
+        line-height:1.7;
+    }
+
+    .advice-title{
+        font-size:22px;
+        font-weight:600;
+        margin-bottom:12px;
+        color:#ffcc00;
+    }
+
+    .advice-text{
+        font-size:16px;
+        color:#ddd;
+    }
+
+    /* Back button */
+    .back{
+        margin-top:35px;
+        text-decoration:none;
+        font-weight:600;
+        padding:12px 24px;
+        border-radius:12px;
+        background:linear-gradient(90deg,#6a11cb,#2575fc);
+        color:white;
+        transition:0.25s;
+    }
+
+    .back:hover{
+        transform:scale(1.05);
+        box-shadow:0 10px 25px rgba(106,17,203,0.6);
+    }
+
+    @media(max-width:900px){
+        .chart-box,.advice-box{
+            width:92%;
+        }
+        .title{font-size:28px;}
+    }
+</style>
+</head>
+
+<body>
+
+    <!-- Title -->
+    <div class="title">📊 Monthly Emotional Insights</div>
+    <div class="subtitle">Mood trend based on your diary entries over time</div>
+
+    <!-- Chart Box -->
+    <div class="chart-box">
+        <canvas id="moodChart" height="120"></canvas>
+    </div>
+
+    <!-- Advice Box -->
+    <div class="advice-box">
+        <div class="advice-title">🧠 AI Psychological Advice</div>
+        <div class="advice-text">
+            {{ advice }}
+        </div>
+    </div>
+
+    <a href="{{ url_for('diary') }}" class="back">⬅ Back to Diary</a>
+
+<script>
+    const dates = {{ dates|tojson }};
+    const moodValues = {{ mood_values|tojson }};
+
+    const ctx = document.getElementById('moodChart');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: "Mood Trend",
+                data: moodValues,
+
+                /* AREA CHART STYLE */
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+
+                /* Gradient fill */
+                backgroundColor: function(context){
+                    const chart = context.chart;
+                    const {ctx, chartArea} = chart;
+                    if (!chartArea) return null;
+
+                    const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                    gradient.addColorStop(0, "rgba(106, 17, 203, 0.7)");
+                    gradient.addColorStop(1, "rgba(37, 117, 252, 0.05)");
+                    return gradient;
+                },
+                borderColor: "#7a4dff",
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                pointBackgroundColor: "#ffcc00"
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: { color: "#fff", font: { size: 14 } }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context){
+                            let v = context.parsed.y;
+                            if(v === 1) return "Happy 😊";
+                            if(v === -1) return "Sad 😔";
+                            return "Neutral 😌";
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: "#aaa" },
+                    grid: { color: "rgba(255,255,255,0.05)" }
+                },
+                y: {
+                    min: -1,
+                    max: 1,
+                    ticks: {
+                        stepSize: 1,
+                        color: "#aaa",
+                        callback: function(value){
+                            if(value === 1) return "Happy";
+                            if(value === 0) return "Neutral";
+                            if(value === -1) return "Sad";
+                        }
+                    },
+                    grid: { color: "rgba(255,255,255,0.05)" }
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

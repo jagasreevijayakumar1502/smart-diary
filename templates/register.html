@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <style>
+       body{
+  margin:0;
+  font-family:'Segoe UI', sans-serif;
+  min-height:100vh;
+  background: url("{{ url_for('static', filename='images/5.jpg') }}") center/cover no-repeat fixed;
+  position: relative;
+  color:#f1f1f1;
+}
+
+/* black translucent overlay */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,0.75);
+  z-index:0;
+}
+
+/* bring content above overlay */
+*{
+  position: relative;
+  z-index: 1;
+}
+
+        .box {
+            width: 350px;
+            margin: 100px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        a {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            text-decoration: none;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Create Account</h2>
+
+    <form method="POST" action="{{ url_for('register') }}">
+        <input type="email" name="email" placeholder="Enter Gmail" required>
+        <button type="submit">Get OTP</button>
+    </form>
+
+    <a href="/">Already have an account? Login</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Diary | Verify & Register</title>
+
+  <style>
+    /* -------- VERIFY REGISTER PAGE -------- */
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #f1f1f1;
+      overflow: hidden;
+    }
+
+    /* Floating background glow */
+    body::before {
+      content: "";
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(106,17,203,0.35), transparent 70%);
+      top: -100px;
+      left: -100px;
+      animation: floatGlow 8s ease-in-out infinite alternate;
+    }
+
+    body::after {
+      content: "";
+      position: absolute;
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(37,117,252,0.3), transparent 70%);
+      bottom: -120px;
+      right: -120px;
+      animation: floatGlow 10s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatGlow {
+      from { transform: translateY(0); }
+      to { transform: translateY(40px); }
+    }
+
+    /* Card */
+    .box {
+      position: relative;
+      z-index: 1;
+      width: 380px;
+      padding: 40px 35px;
+      border-radius: 22px;
+      background: rgba(18, 18, 18, 0.95);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+      animation: fadeSlide 0.9s ease;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Heading */
+    .box h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    /* Inputs */
+    .box input {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background: #1e1e1e;
+      color: #fff;
+      font-size: 14px;
+      transition: box-shadow 0.3s, background 0.3s;
+    }
+
+    .box input::placeholder {
+      color: #9a9a9a;
+    }
+
+    .box input:focus {
+      background: #262626;
+      box-shadow: 0 0 0 2px #6a11cb;
+    }
+
+    /* Button */
+    .box button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #6a11cb, #2575fc);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .box button:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 12px 30px rgba(106,17,203,0.6);
+    }
+
+    /* Small helper text */
+    .note {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #bdbdbd;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+    <h2>Verify & Create Account</h2>
+
+    <form method="POST" action="/verify-register">
+      <input type="email" name="email" value="{{ email }}" readonly>
+      <input type="text" name="otp" placeholder="Enter OTP" required>
+      <input type="text" name="username" placeholder="Choose Username" required>
+      <input type="password" name="password" placeholder="Create Password" required>
+
+      <button type="submit">Create Account</button>
+    </form>
+
+    <div class="note">
+      OTP sent to your email · Valid for 5 minutes
+    </div>
+  </div>
+
+</body>
+</html>
